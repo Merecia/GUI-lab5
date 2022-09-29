@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.App {
+    display: flex;
+    background-color: #ffdadada;
+    height: 100%;
+
+    .Form {
+        background-color: white;
+        border-radius: 10px;
+        width: 60%;
+        padding: 20px 0px;
+        margin: 11% auto;
+        border: 1px solid black;
+
+        .Top {
+            margin-left: 20px;
+
+            .FunctionList {
+                margin-bottom: 20px;
+    
+                .FunctionList__Item {
+                    display: block;
+                    margin: 15px 0px;
+
+                    .Function {
+                        margin-left: 10px;
+                    }
+                }
+            }
+        }
+
+        .Bottom {
+
+            .Results {
+                margin-top: 20px;
+    
+                p {
+                    margin: 10px 0px 10px 30px;
+                }
+            }
+
+        }
+    }
+}

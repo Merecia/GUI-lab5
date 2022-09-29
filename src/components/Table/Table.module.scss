@@ -1,0 +1,30 @@
+.Table {
+    margin-top: 20px;
+
+    .Formula {
+        margin-top: 10px;
+        font-size: 22px;
+        text-align: center;
+    }
+
+    table {
+        margin: 20px auto 0px auto;
+        width: 90%;
+        border-collapse: collapse;
+    
+        td, th {
+            background: #eee;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid black;
+            width: 50%;
+        }
+
+        th {
+            font-size: 20px;
+            font-weight: normal;
+            background-color: rgb(245, 226, 150);
+        }
+    
+    }
+}
