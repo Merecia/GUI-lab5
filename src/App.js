@@ -38,7 +38,7 @@ function App() {
 
     setFunctionIndex(fileContent.functionIndex);
 
-    const formula = fileContent.functionIndex === 1 ? formula1 : formula2;
+    const formula = fileContent.functionIndex === '1' ? formula1 : formula2;
 
     setResults({
       'formula': formula, 
