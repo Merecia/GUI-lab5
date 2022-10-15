@@ -163,20 +163,7 @@ function App() {
 
   function saveToPDF() {
 
-    console.log('СОХРАНИТЬ В ПДФ');
-
     ipcRenderer.send('print-to-pdf');
-
-    // const data = {
-    //   functionIndex, 
-    //   'calculations': results.calculations,
-    //   leftLimit, 
-    //   rightLimit, 
-    //   amountOfPoints
-    // };
-
-    // ipcRenderer.send('toPDF', JSON.stringify(data));
-
   }
 
   function renderTable() {
@@ -212,7 +199,7 @@ function App() {
         <Button
           isActive={true}
           onClick={saveToPDF}
-          color='Green'
+          color='Blue'
           width='40%'
           height = '50px'
         >
@@ -316,7 +303,7 @@ function App() {
             isActive={leftLimit && rightLimit && amountOfPoints ? true : false}
             onClick={calculateButtonClickHandler}
             color='Blue'
-            width='90%'
+            width='92%'
             height='50px'
           >
             Calculate

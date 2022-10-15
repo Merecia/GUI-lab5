@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, dialog, shell} = require('electron')
+const { app, BrowserWindow, Menu, dialog, shell } = require('electron')
 const fs = require('fs')
 const { ipcMain } = require('electron');
 
@@ -12,7 +12,7 @@ function createWindow() {
 
         dialog.showMessageBox({
             message: `You have opened too many windows.\n` +
-            `You can open no more than ${maximumAmountOfWindows} windows.`
+                `You can open no more than ${maximumAmountOfWindows} windows.`
         });
 
         return;
@@ -43,8 +43,9 @@ app.whenReady().then(() => {
         {
             label: 'Window',
             submenu: [
-                { 
+                {
                     label: 'Open a new window',
+                    accelerator: 'CmdOrCtrl+W',
                     click: createWindow
                 }
             ]
@@ -55,7 +56,7 @@ app.whenReady().then(() => {
             submenu: [
                 {
                     label: 'Open a file',
-                    accelerator: 'CmdOrCtrl+O',
+                    accelerator: 'CmdOrCtrl+F',
                     click: openFile
                 }
             ]
@@ -80,13 +81,13 @@ app.on('activate', () => {
     }
 })
 
-ipcMain.on('print-to-file', (event, data) => {
+ipcMain.on('print-to-file', (_, data) => {
 
     dialog.showSaveDialog(window, {
 
         filters: [
-            {name: '.json', extensions: ['json']},
-            {name: '.doc', extensions: ['doc']}
+            { name: '.json', extensions: ['json'] },
+            { name: '.doc', extensions: ['doc'] }
         ]
 
     }).then(file => {
@@ -97,7 +98,7 @@ ipcMain.on('print-to-file', (event, data) => {
 
             fs.writeFile(filePath, data, error => {
 
-                if (error) throw(error);
+                if (error) throw (error);
 
                 console.log('The file was successfully saved');
 
@@ -105,54 +106,54 @@ ipcMain.on('print-to-file', (event, data) => {
 
         }
 
-    }).catch(error => console.log(error.message));
+    }).catch(error => console.log(error));
 
 })
 
-ipcMain.on('print-to-pdf', event => {
+ipcMain.on('print-to-pdf', () => {
 
     dialog.showSaveDialog({
 
-        filters: [{name: '.pdf', extensions: ['pdf']}]
+        filters: [{ name: '.pdf', extensions: ['pdf'] }]
 
     }).then(file => {
 
         if (!file.canceled) {
 
-            let filePath = file.filePath.toString();
+            const filePath = file.filePath.toString();
 
-            window.webContents.printToPDF({}, (error, data) => {
+            const options = {
+                marginsType: 0,
+                pageSize: 'A4',
+                printBackground: true,
+                printSelectionOnly: false,
+                landscape: false
+            }
 
-                filePath = './doc.pdf';
-
-                if (error) console.log(error.message);
+            window.webContents.printToPDF(options).then(data => {
 
                 fs.writeFile(filePath, data, error => {
 
-                    if (error) console.log(error.message);
+                    if (error) console.log(error);
 
-                    console.log('The file was successfully saved');
+                    else console.log('PDF Generated Successfully');
 
                 });
 
             });
         }
 
-    }).catch(error => console.log(error.message));
+    }).catch(error => console.log(error));
 
 })
 
 function openFile() {
 
-    let windows = BrowserWindow.getAllWindows();
-
-    console.log(windows);
-
     dialog.showOpenDialog({
 
         filters: [
-            {name: '.json', extensions: ['json']},
-            {name: '.doc', extensions: ['doc']}
+            { name: '.json', extensions: ['json'] },
+            { name: '.doc', extensions: ['doc'] }
         ]
 
     }).then(file => {
@@ -164,9 +165,9 @@ function openFile() {
             const content = fs.readFileSync(path).toString();
 
             window.webContents.send('fromFile', content);
-            
+
         }
 
     }).catch(error => console.log(error));
-    
+
 }
