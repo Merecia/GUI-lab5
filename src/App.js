@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import style from './App.module.scss';
 import Button from './components/Button/Button';
 import Input from './components/Input/Input';
 import Popup from './components/Popup/Popup';
 import Table from './components/Table/Table';
 import Plot from './components/Plot/Plot';
+
+const { ipcRenderer } = window.require('electron');
 
 function App() {
 
@@ -29,6 +31,27 @@ function App() {
 
   const formula1 = <span>10<sup>1+x<sup>2</sup></sup> - 10<sup>1-x<sup>2</sup></sup></span>
   const formula2 = <span>tg(3x-156) + tgx - 4sinx</span>
+
+  ipcRenderer.on('fromFile', (_, fileContent) => {
+
+    fileContent = JSON.parse(fileContent);
+
+    setFunctionIndex(fileContent.functionIndex);
+
+    const formula = fileContent.functionIndex === 1 ? formula1 : formula2;
+
+    setResults({
+      'formula': formula, 
+      'calculations': fileContent.calculations
+    });
+
+    setLeftLimit(fileContent.leftLimit);
+
+    setRightLimit(fileContent.rightLimit);
+
+    setAmountOfPoints(fileContent.amountOfPoints);
+
+  })
 
   function calculateButtonClickHandler() {
 
@@ -124,6 +147,38 @@ function App() {
 
   }
 
+  function saveToFile() {
+
+    const data = {
+      functionIndex, 
+      'calculations': results.calculations,
+      leftLimit, 
+      rightLimit, 
+      amountOfPoints
+    };
+
+    ipcRenderer.send('print-to-file', JSON.stringify(data, null, 4));
+
+  }
+
+  function saveToPDF() {
+
+    console.log('СОХРАНИТЬ В ПДФ');
+
+    ipcRenderer.send('print-to-pdf');
+
+    // const data = {
+    //   functionIndex, 
+    //   'calculations': results.calculations,
+    //   leftLimit, 
+    //   rightLimit, 
+    //   amountOfPoints
+    // };
+
+    // ipcRenderer.send('toPDF', JSON.stringify(data));
+
+  }
+
   function renderTable() {
 
     return <Table
@@ -139,6 +194,34 @@ function App() {
 
   }
 
+  function renderButtons() {
+
+    return (
+      <div className={style.Buttons}>
+
+        <Button
+          isActive={true}
+          onClick={saveToFile}
+          color='Purple'
+          width='40%'
+          height='50px'
+        >
+          Save to File
+        </Button>
+
+        <Button
+          isActive={true}
+          onClick={saveToPDF}
+          color='Green'
+          width='40%'
+          height = '50px'
+        >
+          Save to PDF
+        </Button>
+      </div>
+    )
+  }
+
   function renderResults() {
 
     return <div className={style.Results}>
@@ -146,6 +229,8 @@ function App() {
       {renderTable()}
 
       {renderPlot()}
+
+      {renderButtons()}
 
     </div>
 
@@ -241,9 +326,7 @@ function App() {
 
         <div className={style.Bottom}>
 
-          {
-            results ? renderResults() : null
-          }
+          { results ? renderResults() : null }
 
         </div>
 

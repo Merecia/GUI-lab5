@@ -2,10 +2,14 @@ import React from 'react'
 import Row from './Row/Row'
 import style from './Table.module.scss'
 
+const fileContent = localStorage.getItem('fileContent');
+
 function Table ({formula, calculations}) {
 
     return (
         <div className={style.Table}>
+
+            {fileContent}
 
             <hr/>
 
