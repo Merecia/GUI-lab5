@@ -32,7 +32,7 @@ function App() {
   const formula1 = <span>10<sup>1+x<sup>2</sup></sup> - 10<sup>1-x<sup>2</sup></sup></span>
   const formula2 = <span>tg(3x-156) + tgx - 4sinx</span>
 
-  ipcRenderer.on('fromFile', (_, fileContent) => {
+  ipcRenderer.on('read-from-file', (_, fileContent) => {
 
     fileContent = JSON.parse(fileContent);
 

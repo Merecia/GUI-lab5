@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, dialog, shell } = require('electron')
+const { app, BrowserWindow, Menu, dialog, remote } = require('electron')
 const fs = require('fs')
 const { ipcMain } = require('electron');
 
@@ -32,7 +32,7 @@ function createWindow() {
 
     window.loadURL('http://localhost:3000');
 
-    window.webContents.openDevTools();
+    //window.webContents.openDevTools();
 }
 
 app.whenReady().then(() => {
@@ -83,6 +83,8 @@ app.on('activate', () => {
 
 ipcMain.on('print-to-file', (_, data) => {
 
+    window = BrowserWindow.getFocusedWindow();
+
     dialog.showSaveDialog(window, {
 
         filters: [
@@ -111,6 +113,8 @@ ipcMain.on('print-to-file', (_, data) => {
 })
 
 ipcMain.on('print-to-pdf', () => {
+
+    window = BrowserWindow.getFocusedWindow();
 
     dialog.showSaveDialog({
 
@@ -149,6 +153,8 @@ ipcMain.on('print-to-pdf', () => {
 
 function openFile() {
 
+    window = BrowserWindow.getFocusedWindow();
+
     dialog.showOpenDialog({
 
         filters: [
@@ -164,7 +170,7 @@ function openFile() {
 
             const content = fs.readFileSync(path).toString();
 
-            window.webContents.send('fromFile', content);
+            window.webContents.send('read-from-file', content);
 
         }
 
