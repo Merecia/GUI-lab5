@@ -127,11 +127,8 @@ ipcMain.on('print-to-pdf', () => {
             const filePath = file.filePath.toString();
 
             const options = {
-                marginsType: 0,
                 pageSize: 'A4',
                 printBackground: true,
-                printSelectionOnly: false,
-                landscape: false
             }
 
             window.webContents.printToPDF(options).then(data => {
